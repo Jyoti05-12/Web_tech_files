@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Tags Interactive Educational Guide</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .code-font { font-family: 'Fira Code', monospace; }
+        /* Custom scrollbar for clean appearance */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-white/80 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-800 px-4 lg:px-8 py-3.5 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <div class="bg-gradient-to-tr from-orange-500 to-amber-500 text-white p-2.5 rounded-xl shadow-lg shadow-orange-500/20 flex items-center justify-center">
+                <i class="fa-solid fa-code text-lg"></i>
+            </div>
+            <div>
+                <h1 class="font-bold text-lg tracking-tight bg-gradient-to-r from-orange-600 to-amber-500 bg-clip-text text-transparent">HTML Mastery</h1>
+                <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Interactive Guide to Basic Tags</p>
+            </div>
+        </div>
+
+        <div class="flex items-center space-x-3">
+            <!-- Search bar -->
+            <div class="relative hidden sm:block">
+                <i class="fa-solid fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                <input type="text" id="searchInput" placeholder="Search tags (e.g. div, table, p)..." class="bg-slate-100 dark:bg-slate-800 text-sm rounded-xl pl-10 pr-4 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-orange-500/50 border border-transparent dark:border-slate-700 transition-all">
+            </div>
+            <!-- Theme Toggle -->
+            <button id="themeToggle" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors text-slate-600 dark:text-slate-300">
+                <i class="fa-solid fa-moon dark:hidden"></i>
+                <i class="fa-solid fa-sun hidden dark:block"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Layout -->
+    <div class="flex-1 flex flex-col lg:flex-row max-w-7xl mx-auto w-full p-4 lg:p-6 gap-6">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="w-full lg:w-64 flex-shrink-0">
+            <div class="bg-white dark:bg-slate-800/60 backdrop-blur rounded-2xl p-4 border border-slate-200 dark:border-slate-800 sticky top-24 shadow-sm">
+                <!-- Mobile search bar display -->
+                <div class="relative mb-4 sm:hidden">
+                    <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                    <input type="text" id="mobileSearchInput" placeholder="Search tags..." class="bg-slate-100 dark:bg-slate-700 text-xs rounded-lg pl-9 pr-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-orange-500">
+                </div>
+                
+                <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-3 px-2">Categories</h2>
+                <nav id="categoryNav" class="space-y-1">
+                    <button onclick="filterCategory('all')" data-category="all" class="category-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all bg-orange-500 text-white shadow-md shadow-orange-500/20">
+                        <span class="flex items-center gap-2.5"><i class="fa-solid fa-layer-group w-5"></i> All Tags</span>
+                        <span class="text-xs bg-orange-600/60 px-2 py-0.5 rounded-full" id="count-all">0</span>
+                    </button>
+                    <button onclick="filterCategory('structure')" data-category="structure" class="category-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+                        <span class="flex items-center gap-2.5"><i class="fa-solid fa-sitemap w-5 text-indigo-500"></i> Structure</span>
+                        <span class="text-xs bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded-full text-slate-600 dark:text-slate-300" id="count-structure">0</span>
+                    </button>
+                    <button onclick="filterCategory('typography')" data-category="typography" class="category-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+                        <span class="flex items-center gap-2.5"><i class="fa-solid fa-font w-5 text-blue-500"></i> Text & Typography</span>
+                        <span class="text-xs bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded-full text-slate-600 dark:text-slate-300" id="count-typography">0</span>
+                    </button>
+                    <button onclick="filterCategory('lists')" data-category="lists" class="category-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+                        <span class="flex items-center gap-2.5"><i class="fa-solid fa-list-ul w-5 text-emerald-500"></i> Lists</span>
+                        <span class="text-xs bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded-full text-slate-600 dark:text-slate-300" id="count-lists">0</span>
+                    </button>
+                    <button onclick="filterCategory('media')" data-category="media" class="category-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+                        <span class="flex items-center gap-2.5"><i class="fa-solid fa-link w-5 text-amber-500"></i> Links & Media</span>
+                        <span class="text-xs bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded-full text-slate-600 dark:text-slate-300" id="count-media">0</span>
+                    </button>
+                    <button onclick="filterCategory('tables')" data-category="tables" class="category-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+                        <span class="flex items-center gap-2.5"><i class="fa-solid fa-table w-5 text-purple-500"></i> Tables</span>
+                        <span class="text-xs bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded-full text-slate-600 dark:text-slate-300" id="count-tables">0</span>
+                    </button>
+                    <button onclick="filterCategory('forms')" data-category="forms" class="category-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+                        <span class="flex items-center gap-2.5"><i class="fa-solid fa-keyboard w-5 text-rose-500"></i> Forms</span>
+                        <span class="text-xs bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded-full text-slate-600 dark:text-slate-300" id="count-forms">0</span>
+                    </button>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Main Feed -->
+        <main class="flex-1">
+            <!-- Hero Info Banner -->
+            <div class="bg-gradient-to-r from-orange-500/10 via-amber-500/10 to-orange-500/5 border border-orange-500/20 rounded-2xl p-6 mb-6">
+                <h2 class="text-xl font-bold mb-2 text-orange-600 dark:text-orange-400">Welcome to HTML Basics Interactive Guide</h2>
+                <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                    Explore the fundamental blocks of the World Wide Web. Each tag card includes a plain-language explanation, valid code snippet syntax, a <strong>live interactive browser preview</strong>, and a one-click copy facility.
+                </p>
+            </div>
+
+            <!-- Tags Container -->
+            <div id="tagsContainer" class="space-y-6">
+                <!-- Dynamically populated via JavaScript -->
+            </div>
+
+            <!-- Empty state -->
+            <div id="emptyState" class="hidden text-center py-16 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700">
+                <i class="fa-solid fa-ghost text-4xl text-slate-300 dark:text-slate-600 mb-3"></i>
+                <h3 class="font-bold text-lg mb-1">No tags found</h3>
+                <p class="text-sm text-slate-500">Try checking your spelling or searching for another keyword.</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- JavaScript Tag Database and App Controller -->
+    <script>
+        // Database of HTML tags with complete descriptions, code, and previews
+        const tagsData = [
+            {
+                id: 'html',
+                name: '&lt;html&gt;',
+                title: 'HTML Root Tag',
+                category: 'structure',
+                badgeColor: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20',
+                description: 'The root element of an HTML page. It represents the root of an HTML document and serves as the container for all other HTML elements (except for the <code>&lt;!DOCTYPE&gt;</code> declaration).',
+                code: '&lt;html lang="en"&gt;\n  &lt;head&gt;\n    &lt;title&gt;Page Title&lt;/title&gt;\n  &lt;/head&gt;\n  &lt;body&gt;\n    Hello World!\n  &lt;/body&gt;\n&lt;/html&gt;',
+                previewHTML: '<div class="p-3 bg-indigo-50 dark:bg-indigo-950/40 rounded-xl border border-indigo-200 dark:border-indigo-900 text-sm"><span class="font-semibold text-indigo-600 dark:text-indigo-400">&lt;html&gt; root container active.</span> All web content wraps inside this document node.</div>'
+            },
+            {
+                id: 'head',
+                name: '&lt;head&gt;',
+                title: 'Document Header',
+                category: 'structure',
+                badgeColor: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20',
+                description: 'Contains metadata about the document, such as its title, character set, linked stylesheets, scripts, and meta configurations. Content inside <code>&lt;head&gt;</code> is not displayed directly on the webpage.',
+                code: '&lt;head&gt;\n  &lt;meta charset="UTF-8"&gt;\n  &lt;title&gt;My Awesome Website&lt;/title&gt;\n  &lt;link rel="stylesheet" href="style.css"&gt;\n&lt;/head&gt;',
+                previewHTML: '<div class="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl text-xs font-mono text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700">Metadata hidden from user view. Controls page title, icons, and CSS links.</div>'
+            },
+            {
+                id: 'body',
+                name: '&lt;body&gt;',
+                title: 'Document Body',
+                category: 'structure',
+                badgeColor: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20',
+                description: 'Represents the content of an active document. Only one <code>&lt;body&gt;</code> element is permitted in a document. It contains all the visible contents such as text, images, tables, and forms.',
+                code: '&lt;body&gt;\n  &lt;h1&gt;Welcome to my site&lt;/h1&gt;\n  &lt;p&gt;This is rendered inside the body.&lt;/p&gt;\n&lt;/body&gt;',
+                previewHTML: '<div class="p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm"><h4 class="font-bold text-sm">Welcome to my site</h4><p class="text-xs text-slate-500 mt-1">This is rendered inside the body container.</p></div>'
+            },
+            {
+                id: 'headings',
+                name: '&lt;h1&gt; to &lt;h6&gt;',
+                title: 'Heading Tags',
+                category: 'typography',
+                badgeColor: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
+                description: 'HTML headings represent six levels of section headings. <code>&lt;h1&gt;</code> is the highest section level (most important) and <code>&lt;h6&gt;</code> is the lowest.',
+                code: '&lt;h1 class="text-xl font-bold"&gt;Heading 1 (Main Title)&lt;/h1&gt;\n&lt;h2 class="text-lg font-semibold"&gt;Heading 2 (Sub-section)&lt;/h2&gt;\n&lt;h3 class="text-base font-medium"&gt;Heading 3 (Minor heading)&lt;/h3&gt;',
+                previewHTML: '<div class="space-y-1"><h1 class="text-xl font-bold">Heading 1 (Main Title)</h1><h2 class="text-lg font-semibold text-slate-700 dark:text-slate-300">Heading 2 (Sub-section)</h2><h3 class="text-base font-medium text-slate-600 dark:text-slate-400">Heading 3 (Minor heading)</h3></div>'
+            },
+            {
+                id: 'p',
+                name: '&lt;p&gt;',
+                title: 'Paragraph Tag',
+                category: 'typography',
+                badgeColor: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
+                description: 'The <code>&lt;p&gt;</code> element represents a paragraph of text. Paragraphs are block-level elements and usually rendered as blocks separated by vertical space.',
+                code: '&lt;p&gt;HTML is the standard markup language for creating Web pages. It describes the structure of a Web page semantically.&lt;/p&gt;',
+                previewHTML: '<p class="text-sm leading-relaxed text-slate-600 dark:text-slate-300">HTML is the standard markup language for creating Web pages. It describes the structure of a Web page semantically.</p>'
+            },
+            {
+                id: 'formatting',
+                name: '&lt;strong&gt;, &lt;em&gt;, &lt;mark&gt;',
+                title: 'Text Formatting Tags',
+                category: 'typography',
+                badgeColor: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
+                description: 'These inline tags add semantic formatting: <code>&lt;strong&gt;</code> for bold important text, <code>&lt;em&gt;</code> for emphasized italic text, and <code>&lt;mark&gt;</code> for highlighted background text.',
+                code: '&lt;p&gt;This is &lt;strong&gt;bold important&lt;/strong&gt; text, this is &lt;em&gt;emphasized italic&lt;/em&gt;, and this is &lt;mark&gt;highlighted&lt;/mark&gt;.&lt;/p&gt;',
+                previewHTML: '<p class="text-sm text-slate-600 dark:text-slate-300">This is <strong>bold important</strong> text, this is <em>emphasized italic</em>, and this is <mark class="bg-amber-200 dark:bg-amber-800 dark:text-white px-1 rounded">highlighted</mark>.</p>'
+            },
+            {
+                id: 'lists',
+                name: '&lt;ul&gt;, &lt;ol&gt;, &lt;li&gt;',
+                title: 'Unordered & Ordered Lists',
+                category: 'lists',
+                badgeColor: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+                description: 'Used to display lists of items. <code>&lt;ul&gt;</code> produces bulleted (unordered) lists, <code>&lt;ol&gt;</code> produces numbered (ordered) lists, and <code>&lt;li&gt;</code> represents individual list items inside them.',
+                code: '&lt;ul&gt;\n  &lt;li&gt;First bullet item&lt;/li&gt;\n  &lt;li&gt;Second bullet item&lt;/li&gt;\n&lt;/ul&gt;\n\n&lt;ol&gt;\n  &lt;li&gt;First step&lt;/li&gt;\n  &lt;li&gt;Second step&lt;/li&gt;\n&lt;/ol&gt;',
+                previewHTML: '<div class="grid grid-cols-2 gap-4 text-sm"><div><span class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wide block mb-1">Unordered (&lt;ul&gt;)</span><ul class="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-300"><li>Apples</li><li>Bananas</li></ul></div><div><span class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wide block mb-1">Ordered (&lt;ol&gt;)</span><ol class="list-decimal list-inside space-y-1 text-slate-600 dark:text-slate-300"><li>Step one</li><li>Step two</li></ol></div></div>'
+            },
+            {
+                id: 'anchor',
+                name: '&lt;a&gt;',
+                title: 'Hyperlink Tag',
+                category: 'media',
+                badgeColor: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
+                description: 'The <code>&lt;a&gt;</code> (anchor) tag creates a hyperlink to web pages, files, email addresses, locations on the same page, or anything else a URL can address. Uses the <code>href</code> attribute.',
+                code: '&lt;a href="https://developer.mozilla.org" target="_blank" class="text-blue-500 underline"&gt;\n  Visit MDN Web Docs\n&lt;/a&gt;',
+                previewHTML: '<div class="text-sm"><a href="#anchor" onclick="event.preventDefault(); showToast();" class="inline-flex items-center gap-1.5 text-orange-600 dark:text-orange-400 font-medium hover:underline"><i class="fa-solid fa-external-link-alt text-xs"></i> Visit MDN Web Docs (Interactive Link)</a></div>'
+            },
+            {
+                id: 'image',
+                name: '&lt;img&gt;',
+                title: 'Image Embed Tag',
+                category: 'media',
+                badgeColor: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
+                description: 'Embeds an image into the document. It is a self-closing tag that requires the <code>src</code> attribute for the source URL and the <code>alt</code> attribute for accessible fallback descriptions.',
+                code: '&lt;img src="https://placehold.co/400x200/orange/white?text=HTML+Sample+Image" alt="Sample placeholder graphic" class="rounded-xl"&gt;',
+                previewHTML: '<div class="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800"><img src="https://placehold.co/400x160/f97316/white?text=HTML+Sample+Image" alt="Sample preview image" class="w-full h-32 object-cover"></div>'
+            },
+            {
+                id: 'table',
+                name: '&lt;table&gt;, &lt;tr&gt;, &lt;th&gt;, &lt;td&gt;',
+                title: 'Table Structure Tags',
+                category: 'tables',
+                badgeColor: 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20',
+                description: 'Used to present tabular data in rows and columns. <code>&lt;table&gt;</code> wraps the dataset, <code>&lt;tr&gt;</code> creates table rows, <code>&lt;th&gt;</code> defines table headers, and <code>&lt;td&gt;</code> represents standard data cells.',
+                code: '&lt;table class="w-full border-collapse"&gt;\n  &lt;tr&gt;\n    &lt;th class="border p-2"&gt;Name&lt;/th&gt;\n    &lt;th class="border p-2"&gt;Role&lt;/th&gt;\n  &lt;/tr&gt;\n  &lt;tr&gt;\n    &lt;td class="border p-2"&gt;Alice&lt;/td&gt;\n    &lt;td class="border p-2"&gt;Developer&lt;/td&gt;\n  &lt;/tr&gt;\n&lt;/table&gt;',
+                previewHTML: '<div class="overflow-x-auto"><table class="w-full text-xs text-left border-collapse border border-slate-200 dark:border-slate-700"><tr class="bg-slate-100 dark:bg-slate-800"><th class="border border-slate-200 dark:border-slate-700 p-2 font-semibold">Name</th><th class="border border-slate-200 dark:border-slate-700 p-2 font-semibold">Role</th></tr><tr><td class="border border-slate-200 dark:border-slate-700 p-2">Alice Smith</td><td class="border border-slate-200 dark:border-slate-700 p-2">Frontend Developer</td></tr><tr><td class="border border-slate-200 dark:border-slate-700 p-2">Bob Jones</td><td class="border border-slate-200 dark:border-slate-700 p-2">UI Designer</td></tr></table></div>'
+            },
+            {
+                id: 'form',
+                name: '&lt;form&gt;, &lt;input&gt;, &lt;button&gt;',
+                title: 'Interactive Form Tags',
+                category: 'forms',
+                badgeColor: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
+                description: 'Used to collect user input. <code>&lt;form&gt;</code> wraps interactive controls, <code>&lt;input&gt;</code> creates text fields, checkboxes, or radio buttons, and <code>&lt;button&gt;</code> triggers submission or action scripts.',
+                code: '&lt;form&gt;\n  &lt;label&gt;Your Email:&lt;/label&gt;\n  &lt;input type="email" placeholder="name@example.com"&gt;\n  &lt;button type="submit"&gt;Subscribe&lt;/button&gt;\n&lt;/form&gt;',
+                previewHTML: '<div class="space-y-2 text-xs"><div class="flex flex-col gap-1"><label class="font-medium text-slate-600 dark:text-slate-300">Your Email:</label><input type="email" placeholder="name@example.com" class="px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs"></div><button type="button" onclick="showToast()" class="px-4 py-1.5 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded-lg shadow-sm transition-colors">Subscribe Now</button></div>'
+            },
+            {
+                id: 'div_span',
+                name: '&lt;div&gt; &amp; &lt;span&gt;',
+                title: 'Generic Container Tags',
+                category: 'structure',
+                badgeColor: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20',
+                description: '<code>&lt;div&gt;</code> is a block-level generic container for grouping flow content, while <code>&lt;span&gt;</code> is an inline generic container used for styling or scripting specific text segments without breaking flow.',
+                code: '&lt;div class="card"&gt;\n  &lt;p&gt;This is inside a block div container with a &lt;span class="text-orange-500"&gt;highlighted span&lt;/span&gt; inline.&lt;/p&gt;\n&lt;/div&gt;',
+                previewHTML: '<div class="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 text-xs"><p>This is inside a block div container with a <span class="text-orange-600 dark:text-orange-400 font-semibold bg-orange-100 dark:bg-orange-950 px-1.5 py-0.5 rounded">highlighted span</span> inline text piece.</p></div>'
+            }
+        ];
+
+        let currentCategory = 'all';
+        let searchQuery = '';
+
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCategoryCounts();
+            renderTags();
+
+            // Setup search listeners
+            const searchInput = document.getElementById('searchInput');
+            const mobileSearchInput = document.getElementById('mobileSearchInput');
+
+            const handleSearch = (e) => {
+                searchQuery = e.target.value.toLowerCase();
+                // Sync inputs
+                if(searchInput) searchInput.value = e.target.value;
+                if(mobileSearchInput) mobileSearchInput.value = e.target.value;
+                renderTags();
+            };
+
+            if(searchInput) searchInput.addEventListener('input', handleSearch);
+            if(mobileSearchInput) mobileSearchInput.addEventListener('input', handleSearch);
+
+            // Theme toggle listener
+            const themeToggle = document.getElementById('themeToggle');
+            themeToggle.addEventListener('click', () => {
+                const html = document.documentElement;
+                if (html.classList.contains('dark')) {
+                    html.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    html.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+
+            // Check saved theme preference
+            if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            }
+        });
+
+        // Update counts in sidebar badges
+        function updateCategoryCounts() {
+            document.getElementById('count-all').innerText = tagsData.length;
+            const categories = ['structure', 'typography', 'lists', 'media', 'tables', 'forms'];
+            categories.forEach(cat => {
+                const count = tagsData.filter(t => t.category === cat).length;
+                const badge = document.getElementById(`count-${cat}`);
+                if(badge) badge.innerText = count;
+            });
+        }
+
+        // Filter category selection
+        function filterCategory(category) {
+            currentCategory = category;
+            
+            // Update active states on sidebar buttons
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                const cat = btn.getAttribute('data-category');
+                if (cat === category) {
+                    btn.className = 'category-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all bg-orange-500 text-white shadow-md shadow-orange-500/20';
+                } else {
+                    btn.className = 'category-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50';
+                }
+            });
+
+            renderTags();
+        }
+
+        // Render tags feed based on filters and search
+        function renderTags() {
+            const container = document.getElementById('tagsContainer');
+            const emptyState = document.getElementById('emptyState');
+
+            const filtered = tagsData.filter(tag => {
+                const matchesCategory = currentCategory === 'all' || tag.category === currentCategory;
+                const matchesSearch = tag.name.toLowerCase().includes(searchQuery) || 
+                                      tag.title.toLowerCase().includes(searchQuery) || 
+                                      tag.description.toLowerCase().includes(searchQuery);
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            container.innerHTML = filtered.map(tag => `
+                <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700/80 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+                    <!-- Tag Header bar -->
+                    <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-700/50 flex flex-wrap items-center justify-between gap-3">
+                        <div class="flex items-center space-x-3">
+                            <span class="code-font font-bold text-base px-3 py-1 rounded-lg border ${tag.badgeColor}">
+                                ${tag.name}
+                            </span>
+                            <h3 class="font-semibold text-base">${tag.title}</h3>
+                        </div>
+                        <span class="text-xs uppercase tracking-wider font-bold px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400">
+                            ${tag.category}
+                        </span>
+                    </div>
+
+                    <!-- Description and Content grid -->
+                    <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                        <!-- Left column: Explanation & Code -->
+                        <div class="space-y-4">
+                            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                                ${tag.description}
+                            </p>
+
+                            <!-- Code Block with Copy Button -->
+                            <div class="relative bg-slate-900 rounded-xl overflow-hidden border border-slate-800">
+                                <div class="flex items-center justify-between px-4 py-2 bg-slate-950/60 border-b border-slate-800/80 text-xs text-slate-400">
+                                    <span class="code-font flex items-center gap-1.5"><i class="fa-solid fa-code text-[10px]"></i> Code Example</span>
+                                    <button onclick="copyCode(this, \`${escapeHTML(tag.code)}\`)" class="hover:text-white transition-colors flex items-center gap-1 bg-slate-800 px-2.5 py-1 rounded-md text-[11px] font-medium text-slate-300">
+                                        <i class="fa-regular fa-copy"></i> Copy
+                                    </button>
+                                </div>
+                                <pre class="p-4 overflow-x-auto text-xs code-font text-orange-300 leading-relaxed"><code>${escapeHTML(tag.code)}</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- Right column: Live Interactive Preview -->
+                        <div class="flex flex-col h-full">
+                            <div class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2 flex items-center gap-1.5">
+                                <i class="fa-solid fa-eye text-orange-500"></i> Live Browser Preview
+                            </div>
+                            <div class="flex-1 bg-slate-50 dark:bg-slate-900/50 rounded-xl p-4 border border-slate-200 dark:border-slate-700/80 flex items-center">
+                                <div class="w-full">
+                                    ${tag.previewHTML}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Helper to escape HTML safely for code display and copying
+        function escapeHTML(str) {
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+        }
+
+        // Copy code using execCommand for robust iframe support
+        function copyCode(btn, codeText) {
+            // Unescape HTML entities back to raw code string
+            const textarea = document.createElement('textarea');
+            textarea.innerHTML = codeText;
+            const decoded = textarea.value;
+
+            const aux = document.createElement('textarea');
+            aux.value = decoded;
+            document.body.appendChild(aux);
+            aux.select();
+            try {
+                document.execCommand('copy');
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-check text-emerald-400"></i> Copied!';
+                btn.classList.add('text-emerald-400');
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                    btn.classList.remove('text-emerald-400');
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+            }
+            document.body.removeChild(aux);
+        }
+
+        // Interactive toast notification for demo buttons
+        function showToast() {
+            const existing = document.getElementById('toastNotification');
+            if(existing) existing.remove();
+
+            const toast = document.createElement('div');
+            toast.id = 'toastNotification';
+            toast.className = 'fixed bottom-6 right-6 z-50 bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 text-sm font-medium animate-bounce';
+            toast.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-400 text-lg"></i> Interactive action triggered successfully!';
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
